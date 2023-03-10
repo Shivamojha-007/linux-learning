@@ -1,0 +1,27 @@
+#Update the package list and install Java: Jenkins requires Java to run. Run the following commands to update the package list and install Java:
+
+sudo apt update
+sudo apt install default-jdk
+
+#Add the Jenkins repository key and package sources: Run the following commands to add the Jenkins repository key and package sources:
+
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+#Update the package list and install Jenkins: Run the following commands to update the package list and install Jenkins:
+
+sudo apt update
+sudo apt install jenkins
+
+#Start the Jenkins service: Run the following command to start the Jenkins service:
+
+sudo systemctl start jenkins
+
+
+#Check the status of the Jenkins service: Run the following command to check the status of the Jenkins service:
+
+sudo systemctl status jenkins
+
+
+
+#Access the Jenkins web interface: Open a web browser and navigate to http://localhost:8080. You should see the Jenkins login screen. Follow the prompts to set up Jenkins and create an admin user.
