@@ -25,3 +25,7 @@ sudo systemctl status jenkins
 
 
 #Access the Jenkins web interface: Open a web browser and navigate to http://localhost:8080. You should see the Jenkins login screen. Follow the prompts to set up Jenkins and create an admin user.
+
+
+#this is the path where you will find the initial password to access jenkins on your localhost only once you will be asked for this passkey
+-- /var/lib/jenkins/secrets/initialAdminPassword
