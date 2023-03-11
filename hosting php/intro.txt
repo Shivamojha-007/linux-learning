@@ -1,1 +1,79 @@
 https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-20-04
+
+start-
+
+
+#1 installing apache
+
+sudo apt update
+sudo apt install apache2
+sudo ufw app list
+sudo ufw allow in "Apache"
+sudo ufw status
+
+
+#2 Instaling php
+
+
+sudo apt install php7.4-fpm -y (optional)
+sudo apt install php libapache2-mod-php php-mysql
+sudo apt install php7.4-{mysql,zip,bcmath}
+
+
+#3 add ssh to your github repo
+
+#4 clone git repo
+
+#5 move the repo to /var/www folder
+
+sudo mv reponame /var/www
+
+
+
+#6 Installing mysql
+
+sudo apt install mysql-server
+sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'new_password';"
+mysql -u root -p
+create database test;
+use test;
+/copy paste your sql file commands here/
+
+#7 update conn.php
+
+cd /var/www/repo
+sudo nano conn.php
+/update username password and database/
+
+#8 change apache2 configurations
+
+cd /etc/apache2
+cd sites-enables
+sudo nano 000-default.conf
+change the root dir to var/www/repo
+/come back to apache2 folder/
+sudo nano apache2.conf
+/change the dirindex to var/www/repo/
+/add below line at the end of the file/
+
+[
+<IfModule dir_module>
+    DirectoryIndex index.php
+</IfModule>
+]
+
+
+
+/the reload the apache/
+sudo service apache2 reload
+
+
+go to localhost or your vm ip
+
+
+exit;
+
+
+
+
+
