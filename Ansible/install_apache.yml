@@ -1,0 +1,31 @@
+- name: Install Apache, Jenkins, PHP, and SQL
+  hosts: ansible, ansible2
+  become: yes
+  
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Download Long Term Jenkins release
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+        dest: /tmp/jenkins.io.key
+
+    - name: Install Java
+      apt:
+        name: openjdk-11-jdk
+        state: present
+
+    - name: Install PHP
+      apt:
+        name: php
+        state: present
+
+    - name: Install MySQL
+      apt:
+        name: mysql-server
+        state: present
+
+
