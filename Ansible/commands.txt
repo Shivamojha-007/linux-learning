@@ -1,0 +1,9 @@
+#to ping on vm's
+$ ansible all -m ping
+
+#to run an ansible playbook
+$ ansible-playbook playbook.yml
+
+#to ping on localhost
+$ ansible localhost -m ping
+
