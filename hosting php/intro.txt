@@ -28,6 +28,10 @@ sudo apt install php7.4-{mysql,zip,bcmath}
 
 sudo mv reponame /var/www
 
+#edit loading page
+
+sudo nano /etc/apache2/mods-enabled/dir.conf
+--change it to login.php
 
 
 #6 Installing mysql
