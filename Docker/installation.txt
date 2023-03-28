@@ -1,1 +1,10 @@
+#Docker installation in ubuntu 
 
+$ sudo apt-get remove docker docker-engine docker.io
+$ sudo apt-get update
+$ sudo apt install docker.io
+$ sudo snap install docker
+$ docker --version
+
+# Add docker to sudo group
+$ sudo setfacl -m user:$USER:rw /var/run/docker.sock
