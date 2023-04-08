@@ -26,7 +26,7 @@ sudo apt install php7.4-{mysql,zip,bcmath}
 
 #5 move the repo to /var/www folder
 
-sudo mv reponame /var/www
+sudo mv reponame/*  /var/www/html
 
 #edit loading page
 
