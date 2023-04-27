@@ -16,7 +16,7 @@ sudo ufw status
 
 
 sudo apt install php7.4-fpm -y (optional)
-sudo apt install php libapache2-mod-php php-mysql
+sudo apt install php7.4 libapache2-mod-php7.4 php7.4-mysql
 sudo apt install php7.4-{mysql,zip,bcmath}
 
 
