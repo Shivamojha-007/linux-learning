@@ -8,6 +8,7 @@ Comment out this line from sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
  log in to mysql
   add below lines
     -- CREATE USER 'newuser'@'%' IDENTIFIED BY 'password';
+    -- CREATE USER 'newuser'@'web ip' IDENTIFIED BY 'password';
     -- GRANT ALL PRIVILEGES ON mydatabase.* TO 'newuser'@'%';
     -- FLUSH PRIVILEGES;
     
