@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: my-nginx-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: my-nginx-app
+    spec:
+      containers:
+        - name: my-nginx-container
+          image: shivamojha21/my-nginx-image:v1
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: regcred
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx-service
+spec:
+  selector:
+    app: my-nginx-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
