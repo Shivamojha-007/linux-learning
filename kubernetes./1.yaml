@@ -1,3 +1,4 @@
+                                                                      
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,20 +19,18 @@ spec:
           ports:
             - containerPort: 80
       imagePullSecrets:
-        - name: regcred
+        - name: mytoken
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: my-nginx-service
 spec:
+  type: ClusterIP
   selector:
     app: my-nginx-app
   ports:
     - name: http
-      protocol: TCP
       port: 80
       targetPort: 80
-  type: LoadBalancer
