@@ -1,0 +1,10 @@
+$ kubectl get all 
+
+$ kubectl apply -f 1.yaml
+
+$ kubectl get pods
+
+$  cat certificate.crt  ca_bundle.crt  >> certi.crt
+
+$ kubectl create secret tls the-nginx-tls --key private.key --cert certi.crt 
+
