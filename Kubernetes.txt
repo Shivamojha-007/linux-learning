@@ -1,0 +1,230 @@
+Kubernetes- k8s
+-----------------------------------
+
+
+Control Plane- The control plane is the nerve center that houses Kubernetes cluster architecture components that control the cluster. 
+It also maintains a data record of the configuration and state of all of the cluster’s Kubernetes objects.
+
+Control Manager -       Actual and Desired State.
+There are various controllers in a Kubernetes ecosystem that drive the states of endpoints (pods and services), tokens and service accounts (namespaces), 
+nodes, and replication (autoscaling).
+
+Kube Scheduler  -       Simply the process of assigning pods to the matched nodes in a cluster. The Kubernetes scheduler stores the resource usage data 
+for each compute node; determines whether a cluster is healthy; and determines whether new containers should be deployed, and if so, 
+where they should be placed. The scheduler considers the health of the cluster generally alongside the pod’s resource demands, such as CPU or memory
+ 	     
+Etcd cluster    -       Kind of a DB. Distributed and fault-tolerant, etcd is an open source, key-value store database that stores configuration data 
+and information about the state of the cluster
+
+Api server      -       It is heart of Cluster which manage all the processes. The front end of the Kubernetes control plane, the API Server supports 
+updates, scaling, and other kinds of lifecycle orchestration by providing APIs for various types of applications. 
+Clients must be able to access the API server from outside the cluster, because it serves as the gateway,
+
+Kubectl         -       Allows you to run commands against Kubernetes clusters. 
+kubectl is the command-line interface (CLI) tool for working with a Kubernetes cluster.
+
+
+Kubeproxy       -       Is a network proxy that runs on each node in your cluster, Assign IP Addresses
+Each compute node contains a network proxy called a kube-proxy that facilitates Kubernetes networking services. The kube-proxy either forwards 
+traffic itself or relies on the packet filtering layer of the operating system to handle network communications both outside and inside the cluster.
+The kube-proxy runs on each node to ensure that services are available to external parties and deal with individual host subnetting.
+
+Kubelet         -       Kubelet is the primary "node agent" that runs on each node which control the pod. 
+Kubelet is the technology that applies, creates, updates, and destroys containers on a Kubernetes node
+
+kube-system ---- Kube-System is the namespace for objects created by the Kubernetes system. Typically, this would contain pods like kube-dns , 
+kube-proxy , kubernetes-dashboard and stuff like fluentd, heapster, ingresses and so on
+
+
+ServiceAccount --- A service account in Kubernetes is an object that allows pods to access the Kubernetes API server to perform actions on behalf of the 
+account. Each pod running in a Kubernetes cluster is associated with a service account, and by default, it uses the default service account for the 
+namespace it's deployed in.
+
+When a pod needs to access Kubernetes API resources, such as creating or deleting objects, it needs to authenticate with the Kubernetes API server. 
+Service accounts provide a way for pods to authenticate with the API server without using any hard-coded credentials. Instead, they use a token that 
+is automatically mounted as a secret inside the pod's filesystem.
+
+Service accounts are used to manage permissions and access control for pods within the Kubernetes cluster. By default, each service account has a set 
+of permissions that can be customized by assigning specific roles or cluster-level permissions to the service account.
+
+In summary, a service account in Kubernetes provides a secure and manageable way to control pod access to the Kubernetes API server, 
+and it's an essential component of securing a Kubernetes cluster.
+
+----------------------------------------------------------------------------------
+
+Create manifest file in yaml
+ 
+kubectl apply -f pod.yaml                                  It will create and execute pod
+kubectl apply -f postgres-service.yml  --dry-run=server     Dry Run the yaml file
+kubectl get pods -o wide                                 It will show where pod is running
+kubectl describe pod podname
+kubectl logs -f podname
+kubectl logs -f podname -c  containername   It will show specific container logs on pod
+kubectl delete pod podname
+kubectl get nodes
+kubectl get all
+kubectl describe node nodeip/name
+kubectl exec podname -c containername -- hostname -i                It will show the IP of container
+kubectl exec podname -it -c containername -- /bin/bash              Access any container  
+----------------------------------------------------------------------------------
+
+Annotations is just for adding a metadata while create any container 
+
+Label is to define the pod and node, Selector is to get the pod with label.
+
+node selector is to define where pod will created
+kubectl label nodes nodeip/name harware=t2micro
+
+Selectors is based upon on two types: Equality based and Set based
+
+Equality based s below:------
+kubectl get pods --show-labels
+kubectl label pods podname myname=pankaj     Add a label to an existing pod
+kubectl get pods -l env=developement         List pods matching a label
+kubectl get pods -l env!=developement        List pods without label of developement
+kubectl delete pod -l env=developement       Delete pod with label developement 
+
+Set based is below:---- in, notin and exists
+kubectl get pods -l 'env in (developement,testing)'
+kubectl get pods -l 'env notin (developement,testing)'
+kubectl get pods -l class=pods, myname=pankaj
+
+--------------------------------------------------------------------------------------
+
+Scaling and Replication
+
+Replication Controller work based upon equality based selector
+kind:replicationcontroller
+kubectl get rc
+kubectl scale --replicas=5 rc -l myname=pankaj  It will create replica of of pods with label name of myname=pankaj
+
+Replica Set= Support Set Based selector. It is advanced version of Replication Controller
+kind:replicaset
+apiVersion: apps/v1
+
+----------------------------------------------------------------------------------------
+
+Deployment and RollBack (object type is Deploy)
+
+kind:deployment
+
+kubectl rollout undo deploy/mydeployments --to-revision=2	     Rollout to previous version of deployment
+kubectl get deploy                                     Inspect the deployment and it will show below fields
+
+Name-- Deployment Name
+Ready-- It will display how many replicas of application are available 
+Uptodate--   Display number of replicas that have been updated
+Available-- Display how many replicas of application are available to user.
+Age-- Display the amount of time that the application has been running
+
+
+
+kubectl describe deploy deploymentname
+kubectl get rs (replicaset)
+kubectl scale --replicas=1 deploy deploymentname
+kubectl logs -f podname
+
+kubectl rollout status deployment deploymentname               Check current status of rollout 
+kubectl rollout history deployment deploymentname              Check history of versions
+kubectl rollout undo deploy/mydeployments --to-revision=2       Rollout to previous version of deployment
+
+---------------------------------------------------------------------------------------------
+
+Networking, Services, NodePort, Volumes, Secrets, PVC
+
+Types of Kubernetes services?::---- dns name of service within the cluster is 
+servicename.namespace.svc.cluster.local
+
+ClusterIP (default) - The service is not exposed outside the cluster, but can be addressed from within 
+                       the cluster.
+NodePort - The service is exposed on a port on every node in the cluster. The service can then be 
+            accessed externally at <node_ip>:<node_port>. When using NodePort services you must make 
+			sure that the selected port is not already opened on your nodes.
+LoadBalancer - The service is exposed as a load balancer in the cluster. LoadBalancer services will 
+               create an internal Kubernetes Service that is connected to a Load Balancer provided by 
+			   your cloud provider (AWS, GCP, or Azure). This will create a publicly addressable set of 
+	      IP addresses and a DNS namethat can be used to access your cluster from an external source.
+ExternalName - The service is mapped to a DNS name, not to a typical selector such as my-service or 
+                 cassandra. You specify the CNAME with the spec.externalName parameter.
+
+
+kubectl get secret
+kubectl describe secret secretname
+
+kubectl create secret docker-registry ecrlogin \
+  --docker-server=471572866878.dkr.ecr.ap-south-1.amazonaws.com\
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password) \
+  --namespace=default
+  
+kubectl create secret docker-registry dockerlogin --docker-server=https://index.docker.io/v1/  \
+      --docker-username=pankaj140589 --docker-password=Pankaj@123 \
+      --docker-email=pankaj1489sharma@gmail.com \
+	  --namespace=default
+
+kubectl create secret docker-registry akrlogin --docker-server=https://taterwisefrontend.azurecr.io \
+                      --docker-username=taterwisefrontend --docker-password=5XF3e+bDLvbG=UIZsvVXazDflAKbCViv \
+					  --docker-email=pankaj.sharma@netsmartz.com
+	  
+kubectl create secret generic postgres --from-literal=POSTGRES_USER="root" \
+      --from-literal=POSTGRES_PASSWORD="root"
+	  
+Decode the password:--	  
+kubectl get secret dockerlogin --output=yaml
+kubectl get secret dockerlogin --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+
+
+
+Tag and Push to Azure:------
+docker tag frontend:latest taterwisefrontend.azurecr.io/frontend:latest
+docker push taterwisefrontend.azurecr.io/frontend:latest
+az acr login --name reponame
+
+
+############################## update configmap
+
+kubectl create configmap adminenv --from-file=default.conf -o yaml --dry-run | kubectl apply -f - -n dev
+
+
+
+##this will add another file in cm
+
+
+
+kubectl create configmap envcm --from-env-file=env.sh -o yaml --dry-run | kubectl apply -f - -n dev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
