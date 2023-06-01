@@ -1,5 +1,3 @@
-he cp command can be used to copy files.
+the cp command can be used to copy files.
 
-One specific file can be copied TO the container like:
-
-docker cp foo.txt container_id:/foo.txt
+$ docker cp foo.txt container_id:/foo.txt
